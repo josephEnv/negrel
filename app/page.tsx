@@ -9,15 +9,35 @@ import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import 'swiper/css'
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
+import { Layer, Map, Source, useControl } from "react-map-gl";
+import { FeatureCollection } from "geojson";
+import { CircleLayerSpecification } from "mapbox-gl";
+import 'mapbox-gl/dist/mapbox-gl.css';
+
+
+
 
 export default function Home() {
 
-  var settings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
+
+  const geojson: FeatureCollection = {
+    type: 'FeatureCollection',
+    features: [
+      {
+        type: 'Feature', geometry: { type: 'Point', coordinates: [-79.84571937695523, -2.1757072968798323] },
+        properties: null
+      }
+    ]
+  };
+
+  const layerStyle: CircleLayerSpecification = {
+    id: 'point',
+    type: 'circle',
+    paint: {
+      'circle-radius': 10,
+      'circle-color': '#007cbf'
+    },
+    source: "a"
   };
 
   return (
@@ -183,18 +203,60 @@ export default function Home() {
         </Swiper>
       </section>
       <section className="flex justify-center items-center min-h-screen flex-row gap-10 p-16">
-          <div>
-            <Image className="w-[150rem] rounded-xl" src={"/restaurant2.webp"} alt="rest" width={500} height={500} />
+        <div>
+          <Image className="w-[150rem] rounded-xl" src={"/restaurant2.webp"} alt="rest" width={500} height={500} />
+        </div>
+        <div>
+          <h1 className="text-5xl">
+            Acerca de Nosotros
+          </h1>
+          <div className="mt-10">
+            <p className="text-lg mb-7">Cheesy Dreams es tu destino único para postres artesanales tan hermosos a la vista como deliciosos al paladar. Nuestros apasionados panaderos utilizan solo los mejores ingredientes para elaborar cada delicia con amor y experiencia, asegurando una experiencia culinaria inolvidable.</p>
+            <p className="text-lg">Entra en nuestro acogedor refugio y deja que el aroma de las delicias recién horneadas te seduzca. Nuestro ambiente acogedor es el escenario perfecto para relajarse, disfrutar de dulces delicias y crear recuerdos preciados con sus seres queridos.</p>
           </div>
-          <div>
-            <h1 className="text-5xl">
-              Acerca de Nosotros
-            </h1>
-            <div className="mt-10">
-              <p className="text-lg mb-7">Cheesy Dreams es tu destino único para postres artesanales tan hermosos a la vista como deliciosos al paladar. Nuestros apasionados panaderos utilizan solo los mejores ingredientes para elaborar cada delicia con amor y experiencia, asegurando una experiencia culinaria inolvidable.</p>
-              <p className="text-lg">Entra en nuestro acogedor refugio y deja que el aroma de las delicias recién horneadas te seduzca. Nuestro ambiente acogedor es el escenario perfecto para relajarse, disfrutar de dulces delicias y crear recuerdos preciados con sus seres queridos.</p>
+        </div>
+      </section>
+      <section className="relative">
+        <Map
+          mapboxAccessToken="pk.eyJ1Ijoiam9zZXBocGF6bWlubzAxIiwiYSI6ImNsdmpxZnNmMTF2eDMybW4xZDhzcHl4NTgifQ.RNbvzrDyYp0efNqkoyCSFA"
+          initialViewState={{
+            latitude: -2.1757072968798323,
+            longitude: -79.84571937695523,
+            zoom: 14
+          }}
+          style={{ width: "100%", height: 400 }}
+          mapStyle="mapbox://styles/mapbox/dark-v11"
+        >
+          <Source id="my-data" type="geojson" data={geojson}>
+            <Layer {...layerStyle} />
+          </Source>
+        </Map>
+      </section>
+      <section id="form" className="flex flex-row mt-16">
+        <div className="flex flex-col p-16">
+          <h1 className="text-4xl">Comuníquese con nosotros</h1>
+          <p className="text-lg mt-3">
+            Tiene una pregunta o necesita ayuda? Utilice el siguiente formulario para ponerse en contacto. ¡Estamos ansiosos por saber de usted!
+          </p>
+        </div>
+        <div className="flex flex-col p-10">
+          <div className="flex flex-row gap-4">
+            <div>
+              <p>Name</p>
+              <input type="text" placeholder="Nombre..." className="mt-2 bg-gray-200 rounded-xl pl-3 w-80 pt-3 pb-3 border-none outline-blue-200 outline-1" />
+            </div>
+            <div>
+              <p>Email</p>
+              <input type="text" placeholder="Email..." className="mt-2 bg-gray-200 rounded-xl pl-3 w-80 pt-3 pb-3 border-none outline-blue-200 outline-1" />
             </div>
           </div>
+          <div className="mt-10">
+            <div>
+              <p>Message</p>
+              <textarea placeholder="Mensaje..." name="" id="" className="mt-2 bg-gray-200 rounded-xl pl-3 w-full h-72 pt-3 pb-3 border-none outline-blue-200 outline-1" />
+            </div>
+          </div>
+        </div>
       </section>
     </main>
   );
